@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "approved": false,
+  "approval_reference": "",
+  "owner": "Business approval required",
+  "products": [
+    {"id": "life_protection", "label": "Life protection", "team": "Life Assurance"},
+    {"id": "funeral", "label": "Funeral cover", "team": "Funeral Sales"},
+    {"id": "medical_aid", "label": "Medical aid", "team": "FLIMAS Membership"},
+    {"id": "retirement_savings", "label": "Retirement or savings", "team": "Pensions Team"},
+    {"id": "property_investment", "label": "Vaka Yako property investment", "team": "Life / Property Team"},
+    {"id": "employee_benefits", "label": "Employee benefits", "team": "Pensions Team"}
+  ],
+  "recommendation_rules": []
+}

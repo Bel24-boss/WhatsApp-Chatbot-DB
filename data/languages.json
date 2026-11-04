@@ -1,0 +1,34 @@
+{
+  "en": {
+    "_commands": {
+      "yes": ["yes", "y"],
+      "no": ["no", "n"],
+      "back": ["back"],
+      "main menu": ["main menu", "menu", "home", "start", "hi", "hello", "hey", "fidelity"],
+      "cancel": ["cancel"],
+      "agent": ["agent", "human", "representative", "speak to an agent"],
+      "self service": ["self service", "self-service", "services"],
+      "ask a question": ["ask", "ask a question", "question"],
+      "skip": ["skip"]
+    },
+    "welcome": "*Welcome to Fidelity Life Assurance Group*\nProtecting what matters most.\n\n1. Self Service\n2. Ask a Question\n3. Urgent Insurance Assistance\n4. Speak to an Agent",
+    "entry_button": "Choose a service",
+    "entry_section": "Available services",
+    "entry_self_service": "Self Service",
+    "entry_ask": "Ask a Question",
+    "entry_urgent": "Urgent Assistance",
+    "entry_agent": "Speak to an Agent",
+    "self_service_contact": "Agent / Contact Us",
+    "self_service_register": "Register / Link",
+    "self_service": "*Self Service*\n\n1. Fidelity Life Assurance\n2. Employee Benefits\n3. Fidelity Funeral Services\n4. Fidelity Life Medical Aid Society (FLIMAS)\n5. Financial Services & Loans\n6. Wealth Management\n7. Actuarial Services\n8. Register / Link My Accounts\n9. Agent / Contact Us\n10. Needs & Quote Guidance\n\nType *Back*, *Agent*, or *Cancel* at any time.",
+    "ask_prompt": "*Ask a Question*\n\nAsk about Fidelity's products, services, offices or general processes. Answers come only from approved Fidelity content.\n\nFor policy details, claims, payments or account changes, I will move you to a secure workflow. Do not send a password, PIN, OTP or card details.",
+    "ask_no_match": "I could not find a confident answer in the approved Fidelity information. Try rephrasing your question, type *Self Service*, or type *Agent*.",
+    "ask_follow_up": "\n\nAsk another question, type *Self Service*, *Main Menu*, or *Agent*.",
+    "survey_resolved": "Before you go, was your issue resolved?\n\n1. Yes\n2. No\n3. Skip survey",
+    "survey_rating": "How would you rate this conversation? Reply with a number from 1 (poor) to 5 (excellent), or type *Skip*.",
+    "survey_comment": "Would you like to add an optional comment? Type your comment, or type *Skip*.",
+    "survey_contact": "Would you like an agent to contact you?\n\n1. Yes\n2. No",
+    "survey_thanks": "Thank you for your feedback.",
+    "invalid_entry": "Choose 1, 2, 3 or 4, or type *Agent*."
+  }
+}

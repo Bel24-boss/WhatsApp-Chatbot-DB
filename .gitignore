@@ -1,0 +1,45 @@
+# Python virtual environment
+venv/
+.venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyd
+
+# Environment variables & secrets
+.env
+*.env.local
+
+# IDE & Editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Testing & Coverage
+.pytest_cache/
+.pytest_runtime/
+.coverage
+htmlcov/
+tmp/
+
+# Local browser captures and generated previews
+.edge-*/
+official-homepage.png
+simulator-*.png
+whatsapp-simulator-*.png
+
+# Logs
+*.log
+logs/
+runtime/
+
+# Local runtime databases (approved JSON catalogues under data/ are source files)
+data/*.db
+data/*.sqlite
+data/*.sqlite3
+
+# Binaries & Tunnel tools
+cloudflared.exe
+*.exe

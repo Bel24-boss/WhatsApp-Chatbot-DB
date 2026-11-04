@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "topics": [
+    {
+      "id": "product_overview",
+      "approved": true,
+      "owner": "Fidelity Customer Experience",
+      "review_due": "2027-01-31",
+      "patterns": {
+        "en": ["what services do you offer", "what products do you have", "tell me about fidelity services"]
+      },
+      "answers": {
+        "en": "Fidelity provides life assurance, funeral services and FLIMAS medical-aid services. The chatbot also supports account registration and linking. Choose Self Service for the available journeys."
+      }
+    },
+    {
+      "id": "funeral_plans",
+      "approved": true,
+      "owner": "Fidelity Funeral Services",
+      "review_due": "2027-01-31",
+      "patterns": {
+        "en": ["tell me about funeral cover", "what funeral plans do you have", "I need burial insurance"]
+      },
+      "answers": {
+        "en": "Fidelity offers Beloved Funeral Plans and Funeral Flexi Combo options. Current premiums, benefits, eligibility and waiting periods must be confirmed by an authorised adviser. Choose Self Service, then Funeral Services, to enquire."
+      }
+    },
+    {
+      "id": "office_contact",
+      "approved": true,
+      "owner": "Fidelity Customer Experience",
+      "review_due": "2027-01-31",
+      "patterns": {
+        "en": ["how do I contact fidelity", "where is your head office", "contact details"]
+      },
+      "answers": {
+        "en": "Use Speak to an Agent for assisted support, or Self Service then Agent / Contact Us for the approved office, telephone and email details."
+      }
+    },
+    {
+      "id": "vaka_yako_overview",
+      "approved": true,
+      "owner": "Fidelity Customer Experience",
+      "review_due": "2027-01-31",
+      "patterns": {
+        "en": ["what is vaka yako", "tell me about the property plan", "property investment plan"]
+      },
+      "answers": {
+        "en": "Vaka Yako combines life assurance with a property-investment pathway. Current contributions, cover, land locations, availability and terms must be confirmed from Fidelity's active product records. Choose Self Service, Life Assurance, then Vaka Yako to request assistance."
+      }
+    },
+    {
+      "id": "savings_retirement_overview",
+      "approved": true,
+      "owner": "Fidelity Customer Experience",
+      "review_due": "2027-01-31",
+      "patterns": {
+        "en": ["do you have savings plans", "retirement products", "pension options"]
+      },
+      "answers": {
+        "en": "Fidelity offers long-term savings or endowment enquiries, individual retirement enquiries and corporate employee-benefit enquiries. An authorised adviser must confirm current product terms, eligibility and any guarantees. Use Needs & Quote Guidance or choose Life Assurance in Self Service."
+      }
+    },
+    {
+      "id": "medical_aid_overview",
+      "approved": true,
+      "owner": "Fidelity Customer Experience",
+      "review_due": "2027-01-31",
+      "patterns": {
+        "en": ["tell me about flimas", "medical aid packages", "family health cover"]
+      },
+      "answers": {
+        "en": "FLIMAS supports individual and family health-package enquiries and corporate self-managed fund consultations. Current rates, benefit limits, age definitions and network rules must be confirmed by an authorised consultant. Choose FLIMAS in Self Service."
+      }
+    }
+  ]
+}

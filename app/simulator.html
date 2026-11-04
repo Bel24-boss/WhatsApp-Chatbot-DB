@@ -1,0 +1,774 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#008069">
+  <title>WhatsApp · Fidelity Assistant</title>
+  <style>
+    :root {
+      --wa-green: #00a884;
+      --wa-green-dark: #008069;
+      --wa-teal: #008069;
+      --wa-bg: #efeae2;
+      --wa-panel: #ffffff;
+      --wa-header: #f0f2f5;
+      --wa-app-bg: #eae6df;
+      --wa-text: #111b21;
+      --wa-secondary: #667781;
+      --wa-border: #e9edef;
+      --wa-outgoing: #d9fdd3;
+      --wa-incoming: #ffffff;
+      --wa-blue: #53bdeb;
+      --wa-notice: #ffeecd;
+      --wa-shadow: 0 6px 18px rgba(11, 20, 26, 0.05);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { width: 100%; min-width: 320px; height: 100%; margin: 0; overflow: hidden; }
+
+    body {
+      color: var(--wa-text);
+      background: linear-gradient(to bottom, var(--wa-green-dark) 0 127px, var(--wa-app-bg) 127px 100%);
+      font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input { font: inherit; }
+    button { color: inherit; }
+
+    .wa-app {
+      width: calc(100% - 38px);
+      max-width: 1600px;
+      height: calc(100% - 38px);
+      margin: 19px auto;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 52px minmax(320px, 390px) minmax(0, 1fr);
+      background: var(--wa-panel);
+      box-shadow: 0 6px 34px rgba(11, 20, 26, 0.24);
+    }
+
+    .icon-button {
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      color: #54656f;
+      background: transparent;
+      cursor: pointer;
+      transition: background 120ms ease;
+    }
+
+    .icon-button:hover { background: rgba(11, 20, 26, 0.06); }
+    .icon-button:active { background: rgba(11, 20, 26, 0.10); }
+    .icon-button svg { width: 22px; height: 22px; }
+
+    .nav-rail {
+      min-width: 0;
+      padding: 10px 6px 9px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: #54656f;
+      background: var(--wa-header);
+      border-right: 1px solid #d8dcdf;
+    }
+
+    .rail-logo {
+      width: 34px;
+      height: 34px;
+      margin: 1px 0 8px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: #fff;
+      background: var(--wa-green);
+    }
+
+    .rail-logo svg { width: 22px; height: 22px; }
+
+    .rail-button {
+      position: relative;
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      color: #54656f;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .rail-button:hover, .rail-button.active { background: #dfe3e5; }
+    .rail-button.active::before {
+      position: absolute;
+      left: -6px;
+      width: 3px;
+      height: 22px;
+      content: "";
+      border-radius: 0 3px 3px 0;
+      background: var(--wa-green-dark);
+    }
+    .rail-button svg { width: 21px; height: 21px; }
+    .rail-spacer { flex: 1; }
+
+    .profile-dot {
+      width: 30px;
+      height: 30px;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      border: 1px solid #d9dddf;
+      border-radius: 50%;
+      background: #fff;
+    }
+    .profile-dot img { width: 88%; height: 88%; object-fit: contain; }
+
+    .sidebar {
+      min-width: 0;
+      display: grid;
+      grid-template-rows: auto auto auto 1fr;
+      background: var(--wa-panel);
+      border-right: 1px solid #d8dcdf;
+    }
+
+    .sidebar-header {
+      height: 60px;
+      padding: 0 14px 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--wa-panel);
+    }
+
+    .sidebar-title {
+      margin: 0;
+      color: var(--wa-text);
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .header-actions { display: flex; align-items: center; gap: 3px; }
+
+    .search-area { padding: 7px 12px 8px; }
+
+    .search-box {
+      height: 36px;
+      padding: 0 12px;
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      align-items: center;
+      border-radius: 8px;
+      color: var(--wa-secondary);
+      background: var(--wa-header);
+    }
+
+    .search-box svg { width: 18px; height: 18px; }
+    .search-box input { min-width: 0; border: 0; outline: 0; color: var(--wa-text); background: transparent; font-size: 12.5px; }
+    .search-box input::placeholder { color: var(--wa-secondary); }
+
+    .filters {
+      padding: 0 12px 10px;
+      display: flex;
+      gap: 7px;
+      overflow: hidden;
+    }
+
+    .filter {
+      height: 32px;
+      padding: 0 13px;
+      flex: 0 0 auto;
+      border: 1px solid var(--wa-border);
+      border-radius: 999px;
+      color: var(--wa-secondary);
+      background: #fff;
+      font-size: 12px;
+      cursor: default;
+    }
+
+    .filter.active { border-color: #d8f4ec; color: #008069; background: #e7fce9; }
+
+    .chat-list { overflow-y: auto; scrollbar-width: thin; scrollbar-color: #ced0d1 transparent; }
+
+    .archived-row {
+      height: 49px;
+      padding: 0 25px;
+      display: flex;
+      align-items: center;
+      gap: 23px;
+      color: var(--wa-text);
+      font-size: 13px;
+    }
+    .archived-row svg { width: 19px; color: var(--wa-green-dark); }
+
+    .chat-item {
+      width: 100%;
+      height: 72px;
+      padding: 0 11px 0 13px;
+      display: grid;
+      grid-template-columns: 49px minmax(0, 1fr);
+      align-items: center;
+      gap: 11px;
+      border: 0;
+      background: #f0f2f5;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .contact-avatar {
+      width: 49px;
+      height: 49px;
+      padding: 5px;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      border: 1px solid #e1e5e7;
+      border-radius: 50%;
+      background: #fff;
+    }
+    .contact-avatar img { width: 100%; height: 100%; object-fit: contain; }
+
+    .chat-item-body {
+      min-width: 0;
+      height: 100%;
+      padding: 12px 4px 12px 0;
+      display: grid;
+      grid-template-rows: auto auto;
+      align-content: center;
+      border-top: 1px solid transparent;
+    }
+
+    .chat-item-line { min-width: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .chat-name { overflow: hidden; font-size: 15px; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; }
+    .chat-time { flex: 0 0 auto; color: var(--wa-secondary); font-size: 10px; }
+    .chat-preview { min-width: 0; overflow: hidden; color: var(--wa-secondary); font-size: 12px; line-height: 20px; text-overflow: ellipsis; white-space: nowrap; }
+
+    .conversation {
+      position: relative;
+      min-width: 0;
+      display: grid;
+      grid-template-rows: 60px minmax(0, 1fr) 62px;
+      background: var(--wa-bg);
+    }
+
+    .conversation-header {
+      z-index: 2;
+      min-width: 0;
+      padding: 0 12px 0 16px;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      background: var(--wa-header);
+      border-bottom: 1px solid #d8dcdf;
+    }
+
+    .back-button { display: none; }
+    .conversation-header .contact-avatar { width: 40px; height: 40px; padding: 4px; }
+
+    .contact-details { min-width: 0; }
+    .contact-name { display: flex; align-items: center; gap: 5px; font-size: 14px; font-weight: 500; }
+    .verified-badge { width: 14px; height: 14px; display: inline-grid; place-items: center; border-radius: 50%; color: #fff; background: var(--wa-green); font-size: 9px; }
+    .contact-status { margin-top: 1px; overflow: hidden; color: var(--wa-secondary); font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+
+    .conversation-actions { display: flex; align-items: center; gap: 3px; }
+
+    .messages {
+      position: relative;
+      min-height: 0;
+      padding: 14px clamp(24px, 7vw, 92px) 22px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scroll-behavior: smooth;
+      background-color: var(--wa-bg);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cg fill='none' stroke='%239eaaa4' stroke-opacity='.13' stroke-width='1.3'%3E%3Cpath d='M12 18c9-8 17 9 7 14S6 25 12 18Zm58-4 8 8-8 8-8-8 8-8Zm49 1c7 0 13 6 13 13m-6-13c0 6 6 12 13 12M30 74c8-6 18 0 16 9s-15 10-20 2c-4-6-1-8 4-11Zm54-22c9 0 17 7 17 16S93 84 84 84 68 77 68 68s7-16 16-16Zm45 35 7 13 14 2-10 10 2 14-13-7-13 7 2-14-10-10 14-2 7-13ZM15 132h25m-13-13v26m52-19c8-8 21-4 22 8s-15 19-24 10c-6-6-4-13 2-18Zm62-3c-5-6-15-3-15 5 0 10 15 17 15 17s15-7 15-17c0-8-10-11-15-5Z'/%3E%3C/g%3E%3C/svg%3E");
+      scrollbar-width: thin;
+      scrollbar-color: rgba(11, 20, 26, 0.20) transparent;
+    }
+
+    .messages::-webkit-scrollbar { width: 6px; }
+    .messages::-webkit-scrollbar-thumb { background: rgba(11, 20, 26, 0.20); }
+
+    .day-label, .encryption-note {
+      width: max-content;
+      max-width: min(90%, 500px);
+      margin: 0 auto 12px;
+      border-radius: 7px;
+      box-shadow: var(--wa-shadow);
+      color: #54656f;
+      text-align: center;
+    }
+
+    .day-label {
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.92);
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+    }
+
+    .encryption-note {
+      padding: 7px 12px;
+      color: #54656f;
+      background: var(--wa-notice);
+      font-size: 10px;
+      line-height: 1.45;
+    }
+
+    .encryption-note svg { width: 10px; height: 10px; margin-right: 3px; vertical-align: -1px; }
+
+    .message-row { width: 100%; margin: 2px 0; display: flex; animation: message-in 150ms ease both; }
+    .message-row.incoming { justify-content: flex-start; }
+    .message-row.outgoing { justify-content: flex-end; }
+
+    .bubble {
+      position: relative;
+      min-width: 82px;
+      max-width: min(68%, 640px);
+      padding: 6px 8px 7px;
+      border-radius: 8px;
+      box-shadow: 0 1px 1px rgba(11, 20, 26, 0.13);
+      font-size: 13px;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+    }
+
+    .incoming .bubble { border-top-left-radius: 0; background: var(--wa-incoming); }
+    .outgoing .bubble { border-top-right-radius: 0; background: var(--wa-outgoing); }
+
+    .incoming .bubble::before, .outgoing .bubble::before {
+      position: absolute;
+      top: 0;
+      width: 0;
+      height: 0;
+      content: "";
+      border-style: solid;
+    }
+
+    .incoming .bubble::before { left: -8px; border-width: 0 8px 9px 0; border-color: transparent var(--wa-incoming) transparent transparent; }
+    .outgoing .bubble::before { right: -8px; border-width: 0 0 9px 8px; border-color: transparent transparent transparent var(--wa-outgoing); }
+
+    .bubble-text { white-space: normal; }
+    .bubble-text strong { font-weight: 600; }
+
+    .message-meta {
+      height: 11px;
+      margin: 2px 0 -1px 10px;
+      float: right;
+      display: inline-flex;
+      align-items: flex-end;
+      gap: 3px;
+      color: #667781;
+      font-size: 9px;
+      line-height: 11px;
+      white-space: nowrap;
+    }
+
+    .checks { color: var(--wa-blue); font-size: 12px; font-weight: 600; letter-spacing: -4px; transform: translateX(-2px); }
+
+    .interactive-trigger {
+      width: calc(100% + 16px);
+      min-height: 39px;
+      margin: 7px -8px -7px;
+      padding: 0 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 0;
+      border-top: 1px solid #e9edef;
+      border-radius: 0 0 8px 8px;
+      color: var(--wa-green-dark);
+      background: transparent;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .interactive-trigger:hover { background: rgba(11, 20, 26, 0.025); }
+    .interactive-trigger svg { width: 17px; height: 17px; }
+
+    .typing-bubble { width: 56px; height: 31px; min-width: 0; display: flex; align-items: center; justify-content: center; gap: 4px; }
+    .typing-bubble i { width: 5px; height: 5px; border-radius: 50%; background: #8696a0; animation: typing 1s infinite ease-in-out; }
+    .typing-bubble i:nth-child(2) { animation-delay: 120ms; }
+    .typing-bubble i:nth-child(3) { animation-delay: 240ms; }
+
+    .composer-bar {
+      z-index: 2;
+      min-width: 0;
+      padding: 9px 13px;
+      display: grid;
+      grid-template-columns: auto auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 5px;
+      background: var(--wa-header);
+      border-top: 1px solid #d8dcdf;
+    }
+
+    .composer-input {
+      min-width: 0;
+      height: 42px;
+      margin: 0 5px;
+      padding: 0 14px;
+      border: 0;
+      border-radius: 8px;
+      outline: 0;
+      color: var(--wa-text);
+      background: #fff;
+      font-size: 13px;
+    }
+
+    .composer-input::placeholder { color: #667781; }
+    .send-button { color: #54656f; }
+    .send-button:disabled { opacity: 0.48; cursor: wait; }
+
+    .list-overlay {
+      position: fixed;
+      z-index: 50;
+      inset: 0;
+      padding: 24px;
+      display: grid;
+      place-items: center;
+      background: rgba(11, 20, 26, 0.42);
+      animation: fade-in 120ms ease both;
+    }
+
+    .list-overlay[hidden] { display: none; }
+
+    .list-dialog {
+      width: min(430px, 100%);
+      max-height: min(650px, 88vh);
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 18px 54px rgba(11, 20, 26, 0.34);
+      animation: dialog-in 160ms ease both;
+    }
+
+    .list-dialog-header {
+      min-height: 61px;
+      padding: 0 12px 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--wa-border);
+    }
+
+    .list-dialog-header strong { font-size: 15px; font-weight: 500; }
+    .list-options { overflow-y: auto; }
+
+    .list-option {
+      width: 100%;
+      min-height: 62px;
+      padding: 9px 20px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      border: 0;
+      border-bottom: 1px solid var(--wa-border);
+      background: #fff;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .list-option:hover { background: #f5f6f6; }
+    .list-option-title { font-size: 13px; font-weight: 400; }
+    .list-option-id { color: var(--wa-green-dark); font-size: 11px; }
+
+    @keyframes message-in { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes typing { 0%, 60%, 100% { opacity: 0.3; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-2px); } }
+    @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes dialog-in { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
+
+    @media (max-width: 1000px) {
+      .wa-app { grid-template-columns: 50px 330px minmax(0, 1fr); }
+      .bubble { max-width: 78%; }
+      .messages { padding-inline: 34px; }
+    }
+
+    @media (max-width: 760px) {
+      body { background: var(--wa-bg); }
+      .wa-app { width: 100%; height: 100%; margin: 0; grid-template-columns: minmax(0, 1fr); box-shadow: none; }
+      .nav-rail, .sidebar { display: none; }
+      .conversation { grid-template-rows: 60px minmax(0, 1fr) calc(62px + env(safe-area-inset-bottom)); }
+      .conversation-header { padding-left: 4px; grid-template-columns: auto auto minmax(0, 1fr) auto; gap: 5px; background: var(--wa-teal); border: 0; color: #fff; }
+      .conversation-header .contact-avatar { width: 39px; height: 39px; }
+      .back-button { display: grid; color: #fff; }
+      .contact-name { color: #fff; font-size: 15px; }
+      .contact-status { color: rgba(255, 255, 255, 0.78); }
+      .conversation-actions .icon-button { color: #fff; }
+      .messages { padding: 12px 14px 22px; }
+      .bubble { max-width: 86%; font-size: 13.5px; }
+      .composer-bar { padding-bottom: calc(9px + env(safe-area-inset-bottom)); grid-template-columns: auto minmax(0, 1fr) auto; }
+      .composer-bar .attach-button { display: none; }
+      .composer-input { margin-left: 2px; border-radius: 21px; }
+      .list-overlay { padding: 0; place-items: end center; }
+      .list-dialog { width: 100%; max-height: 76vh; border-radius: 16px 16px 0 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wa-app" aria-label="WhatsApp simulator">
+    <nav class="nav-rail" aria-label="WhatsApp navigation">
+      <div class="rail-logo" aria-label="WhatsApp">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.5 11.7a8.5 8.5 0 0 1-12.6 7.4L3 20.5l1.4-4.7A8.5 8.5 0 1 1 20.5 11.7Z" stroke="currentColor" stroke-width="1.7"/><path d="M8.1 7.6c.2-.5.4-.5.7-.5h.5c.2 0 .3.1.4.4l.8 1.9c.1.3.1.4-.1.6l-.6.8c-.2.2-.1.4 0 .6.5 1 1.2 1.8 2.1 2.4.8.5 1.4.7 1.7.8.2.1.4 0 .6-.2l.9-1.1c.2-.2.4-.2.6-.1l2 1c.2.1.4.2.4.4 0 .2-.1 1.1-.5 1.6-.4.6-1.3 1.1-2.2 1.1-.6 0-1.4-.1-3.1-.8-2.8-1.2-4.6-4.1-4.7-4.3-.1-.2-1.1-1.5-1.1-2.9 0-1.4.7-2.2 1-2.5.2-.2.4-.3.6-.3Z" fill="currentColor"/></svg>
+      </div>
+      <button class="rail-button active" type="button" aria-label="Chats" title="Chats"><svg viewBox="0 0 24 24" fill="none"><path d="M5 18.5 3.5 21l4.2-1.2c1.3.7 2.7 1 4.3 1 5 0 9-3.7 9-8.3s-4-8.3-9-8.3-9 3.7-9 8.3c0 2.3.7 4.3 2 6Z" stroke="currentColor" stroke-width="1.7"/></svg></button>
+      <button class="rail-button" type="button" aria-label="Status" title="Status"><svg viewBox="0 0 24 24" fill="none"><path d="M7.8 4.1A9 9 0 1 1 3.4 9M4.8 5.8A9 9 0 0 1 6 4.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg></button>
+      <button class="rail-button" type="button" aria-label="Channels" title="Channels"><svg viewBox="0 0 24 24" fill="none"><path d="M5 7.5h14M5 12h14M5 16.5h9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+      <div class="rail-spacer"></div>
+      <button class="rail-button" type="button" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.7"/><path d="M19 13.7v-3.4l-2-.5-.7-1.7 1-1.8-2.4-2.4-1.8 1-1.7-.7-.5-2H7.5l-.5 2-1.7.7-1.8-1-2.4 2.4 1 1.8-.7 1.7-2 .5v3.4l2 .5.7 1.7-1 1.8 2.4 2.4 1.8-1 1.7.7.5 2h3.4l.5-2 1.7-.7 1.8 1 2.4-2.4-1-1.8.7-1.7 2-.5Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg></button>
+      <div class="profile-dot"><img src="/simulator/assets/fidelity-logo.png" alt="Your profile"></div>
+    </nav>
+
+    <aside class="sidebar" aria-label="Chats">
+      <header class="sidebar-header">
+        <h1 class="sidebar-title">Chats</h1>
+        <div class="header-actions">
+          <button class="icon-button" type="button" aria-label="New chat" title="New chat"><svg viewBox="0 0 24 24" fill="none"><path d="M12 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6" stroke="currentColor" stroke-width="1.7"/><path d="m15 18 2 2 4-4M8 9h8M8 13h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button class="icon-button" type="button" aria-label="Menu" title="Menu"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="19" r="1.7"/></svg></button>
+        </div>
+      </header>
+      <div class="search-area"><label class="search-box"><svg viewBox="0 0 24 24" fill="none"><circle cx="10.8" cy="10.8" r="6.6" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><input type="search" placeholder="Search or start a new chat" aria-label="Search chats"></label></div>
+      <div class="filters" aria-label="Chat filters"><button class="filter active" type="button">All</button><button class="filter" type="button">Unread</button><button class="filter" type="button">Favorites</button><button class="filter" type="button">Groups</button></div>
+      <div class="chat-list">
+        <div class="archived-row"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16v14H4V6Zm-1-3h18v3H3V3Zm6 7h6" stroke="currentColor" stroke-width="1.7"/></svg><span>Archived</span></div>
+        <button class="chat-item" type="button" aria-current="page">
+          <div class="contact-avatar"><img src="/simulator/assets/fidelity-logo.png" alt=""></div>
+          <div class="chat-item-body">
+            <div class="chat-item-line"><span class="chat-name">Fidelity Assistant</span><time class="chat-time" id="sidebar-time"></time></div>
+            <div class="chat-item-line"><span class="chat-preview" id="chat-preview">Start a conversation</span></div>
+          </div>
+        </button>
+      </div>
+    </aside>
+
+    <section class="conversation" aria-label="Conversation with Fidelity Assistant">
+      <header class="conversation-header">
+        <button class="icon-button back-button" type="button" aria-label="Back"><svg viewBox="0 0 24 24" fill="none"><path d="m15 5-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div class="contact-avatar"><img src="/simulator/assets/fidelity-logo.png" alt="Fidelity Life Assurance"></div>
+        <div class="contact-details"><div class="contact-name">Fidelity Assistant <span class="verified-badge" title="Business account">✓</span></div><div class="contact-status" id="contact-status">online</div></div>
+        <div class="conversation-actions">
+          <button class="icon-button" type="button" aria-label="Search in conversation" title="Search"><svg viewBox="0 0 24 24" fill="none"><circle cx="10.8" cy="10.8" r="6.6" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+          <button class="icon-button" id="reset" type="button" aria-label="Restart conversation" title="Restart conversation"><svg viewBox="0 0 24 24" fill="none"><path d="M20 11a8 8 0 1 0-2.34 5.66M20 5v6h-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button class="icon-button" type="button" aria-label="Conversation menu" title="Menu"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="19" r="1.7"/></svg></button>
+        </div>
+      </header>
+
+      <div class="messages" id="chat" role="log" aria-live="polite" aria-label="Conversation messages">
+        <div class="encryption-note"><svg viewBox="0 0 24 24" fill="none"><rect x="5" y="10" width="14" height="11" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.7"/></svg>Messages are end-to-end encrypted. No one outside of this chat can read them.</div>
+        <div class="day-label">Today</div>
+      </div>
+
+      <form class="composer-bar" id="form">
+        <button class="icon-button" type="button" aria-label="Emoji"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M8.5 14.5c1 1.3 2.1 2 3.5 2s2.5-.7 3.5-2M9 9h.01M15 9h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <button class="icon-button attach-button" type="button" aria-label="Attach"><svg viewBox="0 0 24 24" fill="none"><path d="m9 17 7.5-7.5a3.2 3.2 0 0 0-4.5-4.5l-8 8a5 5 0 0 0 7 7l8.5-8.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+        <input class="composer-input" id="message" autocomplete="off" maxlength="1000" placeholder="Type a message" aria-label="Type a message">
+        <button class="icon-button send-button" id="send" type="submit" aria-label="Send message"><svg viewBox="0 0 24 24" fill="none"><path d="m4 4 17 8-17 8 3-8-3-8Z" fill="currentColor"/><path d="M7 12h14" stroke="var(--wa-header)" stroke-width="1.5"/></svg></button>
+      </form>
+    </section>
+  </main>
+
+  <div class="list-overlay" id="list-overlay" hidden>
+    <section class="list-dialog" role="dialog" aria-modal="true" aria-labelledby="list-title">
+      <header class="list-dialog-header"><strong id="list-title">Choose an option</strong><button class="icon-button" id="close-list" type="button" aria-label="Close"><svg viewBox="0 0 24 24" fill="none"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></header>
+      <div class="list-options" id="list-options"></div>
+    </section>
+  </div>
+
+  <script>
+    const waId = "263781380349";
+    const chat = document.querySelector("#chat");
+    const input = document.querySelector("#message");
+    const sendButton = document.querySelector("#send");
+    const contactStatus = document.querySelector("#contact-status");
+    const chatPreview = document.querySelector("#chat-preview");
+    const sidebarTime = document.querySelector("#sidebar-time");
+    const listOverlay = document.querySelector("#list-overlay");
+    const listOptions = document.querySelector("#list-options");
+    let busy = false;
+
+    function clock() {
+      return new Date().toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});
+    }
+
+    function appendFormattedText(container, text) {
+      const lines = text.split("\n");
+      lines.forEach((line, lineIndex) => {
+        const fragments = line.split(/(\*[^*\n]+\*)/g).filter(Boolean);
+        fragments.forEach(fragment => {
+          if (fragment.startsWith("*") && fragment.endsWith("*") && fragment.length > 2) {
+            const strong = document.createElement("strong");
+            strong.textContent = fragment.slice(1, -1);
+            container.appendChild(strong);
+          } else {
+            container.appendChild(document.createTextNode(fragment));
+          }
+        });
+        if (lineIndex < lines.length - 1) container.appendChild(document.createElement("br"));
+      });
+    }
+
+    function addMessage(text, direction) {
+      const row = document.createElement("div");
+      row.className = `message-row ${direction}`;
+      const messageBubble = document.createElement("div");
+      messageBubble.className = "bubble";
+      const messageText = document.createElement("span");
+      messageText.className = "bubble-text";
+      appendFormattedText(messageText, text);
+      const meta = document.createElement("span");
+      meta.className = "message-meta";
+      meta.innerHTML = `<time>${clock()}</time>${direction === "outgoing" ? '<span class="checks">✓✓</span>' : ""}`;
+      messageBubble.append(messageText, meta);
+      row.appendChild(messageBubble);
+      chat.appendChild(row);
+      chat.scrollTop = chat.scrollHeight;
+      sidebarTime.textContent = clock();
+      chatPreview.textContent = text.replace(/\*/g, "").replace(/\s+/g, " ").trim();
+      return messageBubble;
+    }
+
+    function showTyping() {
+      const row = document.createElement("div");
+      row.className = "message-row incoming";
+      row.id = "typing";
+      row.innerHTML = '<div class="bubble typing-bubble" aria-label="Fidelity Assistant is typing"><i></i><i></i><i></i></div>';
+      chat.appendChild(row);
+      contactStatus.textContent = "typing…";
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function removeTyping() {
+      document.querySelector("#typing")?.remove();
+      contactStatus.textContent = "online";
+    }
+
+    function closeList() {
+      listOverlay.hidden = true;
+      listOptions.innerHTML = "";
+    }
+
+    function openList(options, title) {
+      listOptions.innerHTML = "";
+      document.querySelector("#list-title").textContent = title || "Choose an option";
+      options.forEach(option => {
+        const button = document.createElement("button");
+        button.className = "list-option";
+        button.type = "button";
+        const optionTitle = document.createElement("span");
+        optionTitle.className = "list-option-title";
+        optionTitle.textContent = option.title;
+        const optionId = document.createElement("span");
+        optionId.className = "list-option-id";
+        optionId.textContent = option.id;
+        button.append(optionTitle, optionId);
+        button.addEventListener("click", () => {
+          closeList();
+          send(option.id);
+        });
+        listOptions.appendChild(button);
+      });
+      listOverlay.hidden = false;
+      listOptions.querySelector("button")?.focus();
+    }
+
+    function addInteractiveButton(messageBubble, reply, interactive) {
+      const rows = interactive?.sections?.flatMap(section => section.rows || []) || [];
+      const parsed = [...reply.matchAll(/^([1-9][0-9]?)\.\s+(.+)$/gm)].map(match => ({id: match[1], title: match[2]}));
+      const options = [...new Map([...rows, ...parsed].map(option => [option.id, option])).values()].slice(0, 10);
+      if (!options.length) return;
+
+      const trigger = document.createElement("button");
+      trigger.className = "interactive-trigger";
+      trigger.type = "button";
+      trigger.innerHTML = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 7h12M7 12h12M7 17h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="3.5" cy="7" r="1" fill="currentColor"/><circle cx="3.5" cy="12" r="1" fill="currentColor"/><circle cx="3.5" cy="17" r="1" fill="currentColor"/></svg><span></span>';
+      trigger.querySelector("span").textContent = interactive?.button || "Choose an option";
+      trigger.addEventListener("click", () => openList(options, interactive?.button));
+      messageBubble.appendChild(trigger);
+    }
+
+    async function send(text, focusAfter = true) {
+      const value = (text ?? input.value).trim();
+      if (!value || busy) return;
+      busy = true;
+      sendButton.disabled = true;
+      input.value = "";
+      addMessage(value, "outgoing");
+      showTyping();
+
+      try {
+        const response = await fetch("/simulator/message", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({wa_id: waId, text: value, user_name: "Believe"})
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        removeTyping();
+        if (data.suppressed) {
+          addMessage("This conversation is being handled by a customer service adviser.", "incoming");
+        } else {
+          const messageBubble = addMessage(data.reply, "incoming");
+          addInteractiveButton(messageBubble, data.reply, data.interactive);
+        }
+      } catch (error) {
+        removeTyping();
+        addMessage("The message could not be completed. Check the local chatbot server and try again.", "incoming");
+        console.error(error);
+      } finally {
+        busy = false;
+        sendButton.disabled = false;
+        if (focusAfter) input.focus();
+      }
+    }
+
+    document.querySelector("#form").addEventListener("submit", event => {
+      event.preventDefault();
+      send();
+    });
+
+    document.querySelector("#reset").addEventListener("click", async () => {
+      if (busy) return;
+      busy = true;
+      sendButton.disabled = true;
+      try {
+        await fetch("/simulator/reset", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({wa_id: waId})
+        });
+        chat.querySelectorAll(".message-row").forEach(message => message.remove());
+        chatPreview.textContent = "Conversation restarted";
+      } finally {
+        busy = false;
+        sendButton.disabled = false;
+      }
+      send("Hello", false);
+    });
+
+    document.querySelector("#close-list").addEventListener("click", closeList);
+    listOverlay.addEventListener("click", event => { if (event.target === listOverlay) closeList(); });
+    document.addEventListener("keydown", event => { if (event.key === "Escape" && !listOverlay.hidden) closeList(); });
+
+    sidebarTime.textContent = clock();
+    send("Hello", false);
+  </script>
+</body>
+</html>
